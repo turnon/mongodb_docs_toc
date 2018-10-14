@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mongodb-docs-toc
 // @namespace    https://github.com/turnon/mongodb_docs_toc
-// @version      0.0.1
+// @version      0.0.2
 // @description  add table of content on https://docs.mongodb.com
 // @author       block24block@gmail.com
 // @match        https://docs.mongodb.com/*
@@ -17,10 +17,14 @@ Ateles(['dropdown', 'when_changed'], (dropdown, when_changed) => {
             toc.remove()
         }
 
-        let titles = {}
+        let titles = []
 
         document.querySelectorAll(selector).forEach(h => {
-            titles[h.parentNode.id] = h.innerText
+            titles.push({
+                id: h.parentNode.id,
+                text: h.innerText,
+                indent: ((parseInt(h.nodeName.replace(/H/, '')) - 2) * 2)
+            })
         })
 
         toc = dropdown(titles, {
